@@ -11,7 +11,12 @@ st.set_page_config(
     initial_sidebar_state="expanded"
 )
 
-DATA_PATH = Path(__file__).parent / "data" / "essential_skills.csv"
+BASE_DIR = Path(__file__).resolve().parent
+
+DATA_PATH = BASE_DIR / "data" / "essential_skills.csv"
+
+if not DATA_PATH.exists():
+    DATA_PATH = BASE_DIR / "essential_skills.csv"
 
 # ----------------  DESIGN ----------------
 st.markdown("""
