@@ -171,11 +171,23 @@ footer {
 # ---------------- DATASET ----------------
 @st.cache_data
 def load_onet_data():
-    if not DATA_PATH.exists():
-        return None
-    data = pd.read_csv(DATA_PATH, low_memory=False)
-    data.columns = data.columns.str.strip()
-    return data
+    base_dir = Path(__file__).resolve().parent
+
+    possible_paths = [
+        base_dir / "data" / "essential_skills.csv",
+        base_dir / "essential_skills.csv",
+        Path.cwd() / "data" / "essential_skills.csv",
+        Path.cwd() / "essential_skills.csv",
+    ]
+
+    for csv_path in possible_paths:
+        if csv_path.is_file():
+            data = pd.read_csv(csv_path, low_memory=False)
+            data.columns = data.columns.astype(str).str.strip()
+            return data
+
+    st.error("CSV file nahi mili. Please check the GitHub data folder.")
+    return None
 
 
 # ---------------- CAREER KNOWLEDGE BASE ----------------
